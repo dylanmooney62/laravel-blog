@@ -1,15 +1,11 @@
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Starter Blog`,
+    title: `Laravel`,
     author: {
-      name: `Kyle Mathews`,
-      summary: `who lives and works in San Francisco building useful things.`,
+      name: `Dylan Mooney.`,
+      summary: `\n A blog demonstrating the development of a simple CMS using the PHP frameworks Larvel`,
     },
-    description: `A starter blog demonstrating what Gatsby can do.`,
-    siteUrl: `https://gatsbystarterblogsource.gatsbyjs.io/`,
-    social: {
-      twitter: `kylemathews`,
-    },
+    description: `A blog demonstrating the development of a simple CMS using the PHP frameworks Larvel.`,
   },
   plugins: [
     `gatsby-plugin-image`,

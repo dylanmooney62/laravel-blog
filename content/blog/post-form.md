@@ -16,7 +16,7 @@ Most of this can be retrieved from basic inputs however there's columns that req
 
 First of all, when the create route is hit **admin/posts/create** the view containing the post form will be returned. 
 
-The categories have also been queried with the view as they will be required to set the `category_id` of the post.
+The categories have also been queried with the view as they will be required to set the category_id of the post.
 
 ```php
 // AdminControllers/PostController.php
@@ -103,15 +103,13 @@ Then I embed the library and create instantiate the Quill object to initialize t
 In it's current state, the form looks okay but there's one glaring issue when the form is submitted. 
 
 
-By using the `ddd($request)` function I can take at the current attributes being sent within the request.
+By using the ddd($request) function I can take a look at the current attributes being sent within the request.
 
 ![Dump of request object missing important values](../../src/images/requests/create-post-missing.png)
 
 I expected to receive the **title**, **category**, **body**, **visibility**.
 
 However **body** and **visibility** are missing.
-
-Let's fix this.
 
 ### Visibility
 
@@ -134,7 +132,7 @@ by default this will be the hidden input unless the checkbox is checked
 <input type="checkbox" name="visible" value="1" class="toggle toggle-primary">
 ```
 
-With this in place if the checkbox is checked a 1 will be sent otherwise 0 will be sent.
+With this in place, if the checkbox is checked a 1 will be sent otherwise 0 will be sent.
 
 
 ### Body
@@ -152,7 +150,7 @@ First I add a hidden input that will contain the editor content to be submitted
 
 Next inside the script I create an on submit event listener to the form. 
 
-Before the form I set the value of the hidden input to the contents of the editor.
+Before the form is submitted I set the value of the hidden input to the contents of the editor.
 
 ```js
 const form = document.querySelector('form');
@@ -175,33 +173,27 @@ Now when I submit the form, the body attribute will be sent containing the conte
 
 There's still work to be done here. I need values for the slug of the post and the excerpt of the post. Theses values could considered computed properties as they'll be created from different columns
 
-I could have done this in the `PostController` **create** method but i'd be duplicating code as I'd to do the exact same processing in the update method. 
+I could have done this in the PostController **create** method but i'd be duplicating code as I'd to do the exact same processing in the update method. 
 
-This led me look for a solution, I was searching for something like a **'pre save'** hook.
+This led me look for a solution, I was searching for something like a pre save hook.
 
 This is when I found Observers. Observers allow you to listen to events on a model - Such as it being created or updated.
 
 This is exactly what I needed
 
-I made an Observer for the Post model using the command
+I made an Observer for the Post model using the command:
 
 ```bash
 php artisan make:observer UserObserver --model=User
 ```
 
-Now I could do some processing to the data before it was saved using the **saving method**
+Now I could do some processing to the data before it was saved using the saving method
 
 This code will run on every save event meaning each time a post is created and updated.
 
 ```php
 class PostObserver
 {
-    /**
-     * Handle the Post "saving" event.
-     *
-     * @param  \App\Models\Post  $post
-     * @return void
-     */
     public function saving(Post $post)
     {
         // Create slug from title

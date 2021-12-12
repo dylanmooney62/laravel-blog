@@ -6,10 +6,12 @@ description: Setting up routes, authentication middleware and scaffolding the Po
 
 ## Routing
 
-All Post CRUD functionality should only be accessible to authenticated users with the following roles: **admin**, **editor**, or **author**. However, I will only implement authentication at this stage of the development process. I will implement authorization after the Post CRUD functionality has been completed to avoid unneeded complexity at such an early stage.
+All Post CRUD functionality should only be accessible to authenticated users with the following roles: **admin**, **editor**, or **author**. 
+
+However, I will only implement authentication at this stage of the development process. I will implement authorization after the Post CRUD functionality has been completed to avoid unneeded complexity at such an early stage.
 
 
-All routes relating to administrative functionality on the site will be protected by authentication can be found at the **/admin** route.
+All routes relating to the administrative functionality of the site will be protected by authentication and can be found at the /admin route.
 
 ```php
 // web.php
@@ -18,25 +20,27 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth'], fu
 });
 ```
 
-The routing is done using the `group` method. 
+The routing is done using the group method. 
 
-The prefix is to `'admin'` which prefixes all the nested resources with **/admin**. 
+The prefix is admin which prefixes all the nested resources with /admin. 
 
-`'as'` sets the name of the route `'admin.'` this allows me to reference the route when performing redirects and generating URLs to resources i.e.
+'as' sets the name of the route admin this allows me to reference the route when performing redirects and generating URLs to resources i.e.
 
 ```php 
 route('admin.posts')
 ```
 
-Finally, the middleware is add authentication. This middleware will run on every request that starts with **/admin**. This middleware will ensure the user is logged in before accessing the resource. Otherwise, it will redirect the user to the login page. 
+Finally, the middleware is auth. This middleware will run on every request that starts with /admin. This middleware will ensure the user is logged in before accessing the resource. Otherwise, it will redirect the user to the login page. 
 
-The routes for **posts** can all be done in one line thanks to the `resource` method. This method creates standard URL paths for CRUD operations and maps them to the specified class.
+The routes for posts can all be done in one line thanks to the resource method.
+
+This method creates standard URL paths for CRUD operations and maps them to the specified class.
 
 ```php
 Route::resource('posts', PostController::class);
 ```
 
-The following **posts** resource will be mapped like this:
+The following posts resource will be mapped like this:
 
 | Verb        | URI                   | Action      | Route Name           |
 | ----------- | --------------------- | ----------- | -------------------- |
@@ -51,9 +55,9 @@ The following **posts** resource will be mapped like this:
 
 ## Scaffolding
 
-Before the aforementioned routes will work I will need to create the `PostController`
+Before the aforementioned routes will work I will need to create the PostController
 
-Laravel makes this super fast and simple using the `make:controller` Artisan command:
+Laravel makes this super fast and simple using the make:controller Artisan command:
 
 ```
 php artisan make:controller AdminControllers/PostController --resource

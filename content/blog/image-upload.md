@@ -59,11 +59,10 @@ Before file uploading would work I had to configure `filesystems.php` file to us
 
 ```php
 // config/filesystems.php
-
-    'links' => [
-        public_path('storage') => storage_path('app/public'),
-        public_path('images') => storage_path('app/public/images')
-    ],
+'links' => [
+    public_path('storage') => storage_path('app/public'),
+    public_path('images') => storage_path('app/public/images')
+],
 ```
 
 I then create the symbolic using the command: 
@@ -72,9 +71,9 @@ I then create the symbolic using the command:
 php artisan storage:link
 ```
 
-While in this CMS I only wanted to upload images for posts, I could have the uploading functionality in the `PostController`. But I wanted a more robust and reusable solution.
+As I only wanted to upload images for posts, I could have the uploading functionality in the `PostController`. But I wanted a more robust and reusable solution.
 
-This is when i researched various methods and found traits in Laravel. Traits allow for reusable code to be injected within controller methods.
+This is when i researched various methods and found **traits** in Laravel. Traits allow for reusable code to be injected within controller methods.
 
 So I created a trait that added the functionality for the removal and upload of images.
 
@@ -104,14 +103,15 @@ trait ImageUpload
 }
 ```
 
-The storage of image is always proceeded by storing that image in the database.
+The storage of of an image is always proceeded by storing that image in the database.
 
-Image uploads can only be done by authenticated users. All authenticated routes pass down the **$user** object this is than passed into the **uploadImage** method and I can use this object to create a image. 
+Image uploads can only be done by authenticated users. All authenticated routes pass down the **$user** and this is then passed into the **uploadImage** method and I can use this to create a image. 
 
-As the Image Model has the **belongsTo** relationship with the **User** I can use the the magic method **images** on the the user object to automatically assign the user_id for the **Image** to the **User**.
+As the Image Model has the **belongsTo** relationship with the **User** I can use the the magic method **images** on the the user to automatically assign the user_id for the **Image** to the **User**.
 
+The removal of the image is always proceeded by removing that image from the database. 
 
-The removal of the image is always proceeded by removing that image from xethe database. The image is passed down and can be delete using the `Storage::delete` method and the path of the image. The Image can then be removed from the database using the **delete** method.
+The image is passed down and can be delete using the **Storage::delete** method and the path of the image. The Image can then be removed from the database using the **delete** method.
 
 
 ## Submitting an Image

@@ -14,7 +14,7 @@ php artisan make:model Comments --migration
 
 The migration is fairly simple, it contains the the id of the user and the post it belongs to. 
 
-These foreign keys are also set to CASCADE DELETE meaning if a post or user is deleted all the comments belonging to that entity will be removed
+These foreign keys are also set to **CASCADE DELETE** meaning if a post or user is deleted all the comments belonging to that entity will be removed.
 
 ```php
 class CreateCommentsTable extends Migration
@@ -34,9 +34,9 @@ class CreateCommentsTable extends Migration
 }
 ```
 
-The author and post relationships belongs to relationship are set up in the model.
+The author and post **belongsTo** relationship are set up in the model.
 
-The `$with` property contains the the author. Meaning all comments will be eager loaded with their parent user entity.
+The **$with** property contains the the author. Meaning all comments will be eager loaded with their parent user entity.
 
 ```php
 
@@ -67,9 +67,11 @@ class Comment extends Model
 ## Controller
 
 
-The validation logic is set up in the store method. All I need to validate is the comment text and check has been sent with the request and is under 1000 characters.
+The validation logic is set up in the store method. All I need to validate is the comment text and check has been sent with the request and is under 2500 characters.
 
-Due to time constraints, comments can only be created and deleted. However in the future additional markup and functionality could be implemented to allow users to update comments.
+Due to time constraints, comments can only be created and deleted. 
+
+However in the future, additional markup and functionality could be implemented to allow users to update comments.
 
 ```php
 class CommentController extends Controller
@@ -98,11 +100,11 @@ class CommentController extends Controller
 }
 ```
 
-The destroy method makes use a policy which will be explained next
+The destroy method makes use of a policy which will be explained next
 
 ## Policy
 
-To allow admins to monitor the site. Any user that has the role of **admin** **editor** and **author** can remove any comment regardless of ownership.
+To allow admins to monitor the site. Any user that has the role of **admin** **editor** and **author** can remove a comment regardless of ownership.
 
 Regular users have the ability to delete their own comments
 
@@ -139,11 +141,11 @@ class CommentPolicy
 
 ### Form
 
-The form mark uses the `@auth` and `@guest` directives to display different view depending on the users authenticated state.
+The form mark uses the **@auth** and **@guest** directives to display different markup depending on the users authenticated state.
 
-If the user as logged in the submit button will be enabled and a picture of there username and avatar will be displayed.
+If the user as logged in the submit button will be enabled and their username and avatar will be displayed.
 
-If the user is not logged the submit button will be disabled and and message will be displayed notifying the user that they must be logged in to leave a comment
+If the user is not logged in, the submit button will be disabled and a message will be displayed notifying the user that they must be logged in to leave a comment:
 
 ```html
 <form action={{route("comments.store", $post)}} method="POST">
@@ -188,11 +190,13 @@ If the user is not logged the submit button will be disabled and and message wil
 
 ### Deleting a Comment
 
-To delete comments the a form is embedded in each comment with a delete button. Using the `@can` directive I can display the delete functionality conditionally for each comment.
+To delete comments, a form is embedded in each comment with a delete button. 
 
-If user is an admin all the comments will contain a delete button.
+Using the **@can** directive I can display the delete functionality conditionally for each comment.
 
-If the user is a guest only the comments they own will contain a delete button.
+If user is an admin, all the comments will contain a delete button.
+
+If the user is a guest, only the comments they own will contain a delete button.
 
 ```html
 @can('delete', $comment)
@@ -214,7 +218,6 @@ If the user is a guest only the comments they own will contain a delete button.
 Comments for admin user:
 
 ![Comments for admin user](../../src/images/ui/admin-view-comments.png)
-
 
 
 Comments for guests:

@@ -18,10 +18,9 @@ I installed node nodejs and npm
 sudo apt install nodejs npm
 ```
 
-I then `npm install` to install all the packages required for laravel breeze and to use laravel mix
+I then ran `npm install` to install all the packages required for laravel breeze and laravel mix.
 
-Finally I configured the apache default conf file to set the document root the laravel site 
-
+Finally, I configured the apache default conf file to set the document root the laravel site 
 
 ```bash
 /etc/apache2/sites-enabled/000-default-le-ssl.conf
@@ -56,17 +55,15 @@ SSLCertificateKeyFile /etc/letsencrypt/live/cageycat.duckdns.org/privkey.pem
 
 ## Teething problems
 
-As with moving from a local to live site there are always teething problems.
+The deployment went surprisingly well, the only problem I did encounter was that images would not load.
 
-The deployment went surprisingly well, The only problem I did encounter was that images would not load.
-
-When taking a further look a 404 response will being returned
+When taking a further look, a 404 response was being returned.
 
 ![404 response went attempting to load image](../../src/images/deployment/image-not-found.png)
 
-I figured this was due the symbolic being broken when moving the files to the live server so I ran the `php artisan storage:link` command and tried again.
+I figured this was due the symbolic link being broken when moving the files to the live server so I ran the `php artisan storage:link` command and tried again.
 
-But unfortunately, this did not work either. VS Code is very and displays symbolics in the file directory and there was none showing so this command wasn't working.
+But unfortunately, this did not work either. 
 
 In the end, to get it working I had to create symbolic link manually
 
@@ -74,6 +71,6 @@ In the end, to get it working I had to create symbolic link manually
 ln -s /var/www/html/cms/storage/app/public/images /var/www/html/cms/public/images
 ```
 
-And finally the images worked and the site was live and ready!
+Finally the images loaded and the site was live and ready!
 
 ![Final site with images displaying](../../src/images/ui/final-site.png)

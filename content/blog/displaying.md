@@ -7,9 +7,9 @@ description: Retrieving and displaying posts for guests and admin users.
 
 ## Displaying Posts
 
-Displaying posts is very simple however how guests and admins interact with the posts is very different so I had to create a solution that allowed for the different views to be displayed.
+Displaying posts is very simple however how guests and admins interact with posts is very different so I had to create a solution that allowed for the different views to be displayed.
 
-This is why is created two `PostControllers`. one for the guests and one for the admins.
+This is why I created two **PostControllers**. one for the guests and one for the admins.
 
 I updated the routing to accommodate for this:
 
@@ -27,10 +27,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth'], fu
 
 ## The Guest View
 
-
 For the guests all I done was retrieve the latests post which had there visibility set to true.
 
-The show method was also simple and just returned the view will all the post information.
+The show method was also simple and just returned the view with all the post information.
 
 ```php
 // app/Http/Controllers/PostController.php
@@ -106,9 +105,9 @@ The show template is done in similar fashion. And results in this view.
 
 ## The Admin View
 
-The Admin view is different. This information should be condensed to allow quick and easy access to posts. Also all posts show be displayed regardless of their visibility value.
+The Admin view is different. This information should be condensed to allow quick and easy access to posts. Also all posts show be displayed regardless of their visibility.
 
-There is no show method for the Admin PostsController, instead of the user clicked on a post to see more detail they would be direct to the edit page.
+There is no show method for the Admin PostsController, instead if the user clicked on a post to see more detail they would be directed to the edit page.
 
 ```php
 // AdminControllers/PostController.php
@@ -126,11 +125,11 @@ class PostController extends Controller
 
 ```
 
-Using the blade templates we can then iterate over each post and generate HTML markup
+Using the blade templates I can then iterate over each post and generate HTML markup
 
 ```php
 @foreach ($posts as $post)
-<tr class="">
+<tr>
     <td>
         <a href={{route('admin.posts.edit', $post)}} class="font-bold hover:underline">
             {{$post->title}}
@@ -155,9 +154,7 @@ Using the blade templates we can then iterate over each post and generate HTML m
 
 ![Admin view for displaying all posts](../../src/images/ui/admin-all-posts.png)
 
-### One little caveat
-
-While this all works and users are only shown the visible posts. There's one little problem. 
+### One Little Caveat
 
 Just because a post is hidden from the guest view does not mean the user cannot access it. If the user were to know or guess the name of unfinished posts and enter it into the URL it would be shown to them. 
 

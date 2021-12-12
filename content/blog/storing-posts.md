@@ -6,11 +6,11 @@ description: Validating the request and storing the post in the database.
 
 ## Almost There
 
-Now that Image upload has been done and the request object has all the required data. It's now time to create the post and save it to the database. But first I must validate the request to ensure all the required information is sent.
+Now that Image upload has been done and the request object has all the required data. It's now time to create the post and save it to the database. But first, I must validate the request to ensure all the required information is sent.
 
 ## Validation
 
-Laravel offers built in validation rules and methods to validation requests very simple. I stored the validation in rules as property in the `PostController` as I'd need to use the same rules for creating and updating.
+Laravel offers built in validation rules and methods to validation requests very simple. I stored the validation in rules as property in the P**ostController** as I'd need to use the same rules for creating and updating.
 
 The validation rules were as follows
 
@@ -26,13 +26,13 @@ private $validationRules = [
 
 Much of this is self explanatory. 
 
-The notable being the unique which is used to ensure the title attribute is unique in the posts table.
+A notable one being unique which is used to ensure the title attribute is unique in the posts table.
 
 The exists validator which ensures the id being supplied matches a category with that id in the categories table.
 
 ## Validation Errors
 
-If the the form data is invalid. The user will be returned back to the same view and there will be an ```$errors``` variable returned.
+If the the form data is invalid. The user will be returned back to the same view and there will be an **$errors** variable returned.
 
 I can then check for and access this variable and display the appropriate messages.
 
@@ -72,7 +72,7 @@ public function store(Request $request)
 
 First I validate the request
 
-Next I upload the image using the uploadImage method. To access the method I must ensure I add the trait to the `PostController` class like so:
+Next I upload the image using the uploadImage method. To access the method I must ensure I add the trait to the **PostController** class like so:
 
 ```php
 class PostController extends Controller

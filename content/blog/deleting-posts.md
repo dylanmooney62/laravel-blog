@@ -6,9 +6,11 @@ description: Improving the user experience when deleting a post with Alpine.js.
 
 As deleting a post is destructive and permanent, a good UI/UX will implement error prevention allow the user to back track on their decision.
 
-For this I want to implement a modal to would appear every time the user clicked the delete button. For this I used minimal Alpine.js framework laravel provides out of the box
+For this I want to implement a modal that will appear every time the user clicks the delete button. 
 
-First I created the markup for the modal
+For this I used the minimal Alpine.js framework laravel provides out of the box
+
+First, I created the markup for the modal:
 
 ```html
 <div id="modal" class="modal" :class="show && 'modal-open'" :show="show">
@@ -38,7 +40,7 @@ As you can there are multiple attributes that will be bound to dynamic data:
 - title
 - action
 
-Next I create an an alpine object that contains all the data for modal logic.
+Next I create an alpine object that contains all the data for modal logic.
 
 
 ```html
@@ -72,13 +74,13 @@ To understand how this works we take a look at the button element for each post
 </button>
 ```
 
-As you can see click the button will call the `open` method and pass the title of post and id of the post.
+As you can see clicking the button will call the **open** method and pass the title and id of the post.
 
 The open method will then use this id to fill in the action and title for the modal.
 
-It will also set show to true will display the modal on the screen
+Show will be set to true and display the modal on the screen.
 
-For example this clicking on the delete button for this post will generate the following markup: 
+For example, clicking on the delete button for this post will generate the following markup: 
 
 ![Single post in table](../../src/images/ui/deleting-a-post.png)
 
@@ -103,7 +105,7 @@ For example this clicking on the delete button for this post will generate the f
 </div>
 ```
 
-As you can the form data has has been filled with the ID of the post. So when clicking the delete button the post with the id of `3` will be deleted.
+As you can seen the form data has has been filled with the id of the post. So when clicking the delete button the post with the id of **3** will be deleted.
 
 This is displayed like this to the user:
 

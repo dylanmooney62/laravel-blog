@@ -4,7 +4,6 @@ date: "2021-12-03 04"
 description: Adding Policies, authentication and authorization logic to posts.
 ---
 
-
 ## Roles
 
 Before implementing the Policies. I wanted to create roles for different types of users which will have varying privileges.
@@ -40,11 +39,9 @@ class Role extends Model
 }
 ```
 
-I added then added the role_id to user table
-
+I then added the role_id to user table
 
 ```php
-
 class CreateUsersTable extends Migration
 {
     public function up()
@@ -66,12 +63,11 @@ class CreateUsersTable extends Migration
 
 ```
  
-I associated the the User with a role using the **belongsTo** method. I also added various helper functions that will be useful when implementing the validation logic.
+I associated the the User with a role using the **belongsTo** method. I also added various helper methods that will be useful when implementing the validation logic.
 
 ```php
 class User extends Authenticatable
 {
- 
     // ...
 
     public function role()
@@ -100,7 +96,7 @@ The following roles were created:
 
 ## Implementing Policies
 
-Policies are classes that allow the implementation of authorization associated with a particular model. In this case I created a policy for the Post Model
+Policies are classes that allow the implementation of authorization logic associated with a particular model. In this case I created a policy for the Post Model
 
 ```bash
 sail artisan make:policy PostPolicy --model=Post
@@ -163,24 +159,21 @@ First the method will check if the user is the admin or has the role author or e
 
 The before method is run before all authorization checks, this is handy as I can use this to allow the admin to bypass all checks.
 
-
-If it is visible the policy will allow the request to continue otherwise it will abort and return a 404 response to to the users.
-
+If it is visible, the policy will allow the request to continue otherwise it will abort and return a 404 response to to the users.
 
 ![The hidden post page now displays a 404 not found error](../../src/images/ui/hidden-post-fixed.png)
 
-
-This means even if user somehow manages to guess a title of the post - they will be none the wiser as the receive a 404 not found page.
+This means even if user somehow manages to guess a title of the post - they will be none the wiser and receive a 404 not found page.
 
 ### Admin Policies
 
-Create, reading and updating can only be done be done with by users with the roles: **admin**, **editor** and **author**.
+Create, reading and updating can only be performed by users with the roles: **admin**, **editor** and **author**.
 
-So I need to add policies to this functionality but first of all I wanted a catch all solution to prevent any other type of user from even reaching these polices.
+So I need to add policies to this functionality but first of all I wanted a catch all solution to prevent any other type of user from reaching these policies.
 
 This is where I created a gate
 
-Gates are similar to policies but Instead they are used more general purposes like routing.
+Gates are similar to policies but instead they are used more general purposes like routing.
 
 First I defined a gate in the app service provider named admin. This would check if the user had an admin type of role.
 
@@ -200,7 +193,7 @@ class AppServiceProvider extends ServiceProvider
 }
 ```
 
-I then added this gate to routing middleware using the `can:` helper method Laravel provides for gates
+I then added this gate to routing middleware using the **can:** helper method Laravel provides for gates
 
 ```php
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'can:admin']], function () {
@@ -208,9 +201,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'c
 });
 ```
 
-This means every route within this group will now use the admin gate before allowing accessing to route. If the user does not have an admin role they server will respond with a **403 Unauthorised** response.
+This means every route within this group will now use the admin gate before allowing accessing to route. 
 
-Next it was time to implement the policies for the rest of the Post CRUD
+If the user does not have an admin role the server will respond with a **403 Unauthorised** response.
+
+Next, it was time to implement the policies for the rest of the Post CRUD.
 
 From reading the descriptions of the roles of the database the follow rules apply
 
@@ -219,7 +214,6 @@ From reading the descriptions of the roles of the database the follow rules appl
 3. Authors can create and manage their own posts
 
 This logic was implemented by creating a canUpdateOrDelete method within the PostPolicy
-
 
 ```php
 class PostPolicy
@@ -242,10 +236,11 @@ class PostPolicy
 
 ```
 
-The logic is quite is simple. If the user is an editor allow access. If they are an author and own the post, allow access. Otherwise deny the request.
+The logic is quite is simple. 
 
-The method was implemented for Delete and Update methods of the policy.
+If the user is an editor: allow access. If they are an author and own the post: allow access. Otherwise: deny the request.
 
+This method was used for Delete and Update methods of the policy.
 
 ```php
 class PostPolicy
@@ -270,7 +265,7 @@ class PostPolicy
 }
 ```
 
-As I'm using the the resource controller for the AdminPostController. I don't have to add the `$this->authorize` on each route instead I can authorize and map each route using the handy `$this->authorizeRoutes` method.
+As I'm using the the resource controller for the AdminPostController. I don't have to add the **$this->authorize** on each route instead I can authorize and map each route using the handy **$this->authorizeResource** method.
 
 ```php
 // app/Http/Controllers/AdminControllers/PostController.php
@@ -284,5 +279,3 @@ class PostController extends Controller
     // ...
 }
 ```
-
-And with the policies now in place the Post CRUD and authorisation has been completed. Now to move onto comments!

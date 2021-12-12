@@ -33,7 +33,7 @@ This table would contain the path to the image and various data relating to the 
 
 I then created the Image Model.
 
-All images must be uploaded by a user so I added the belongs method and assigned the `User::class`. I renamed this to **uploaded_by ** as it makes more sense semantically
+All images must be uploaded by a user so I added the belongs method and assigned the User::class. I renamed this to **uploaded_by** as it makes more sense semantically
 
 ```php
 class Image extends Model
@@ -55,7 +55,7 @@ class Image extends Model
 }
 ```
 
-Before file uploading would work I had to configure `filesystems.php` file to used symbolic links. This would allow me to store my images in the storage but have them be accessible from the public folder of the site.
+Before file uploading would work I had to configure **filesystems.php** file to used symbolic links. This would allow me to store my images in the storage but have them be accessible from the public folder of the site.
 
 ```php
 // config/filesystems.php
@@ -71,7 +71,7 @@ I then create the symbolic using the command:
 php artisan storage:link
 ```
 
-As I only wanted to upload images for posts, I could have the uploading functionality in the `PostController`. But I wanted a more robust and reusable solution.
+As I only wanted to upload images for posts, I could have the uploading functionality in the PostController. But I wanted a more robust and reusable solution.
 
 This is when i researched various methods and found **traits** in Laravel. Traits allow for reusable code to be injected within controller methods.
 
@@ -147,7 +147,7 @@ document.getElementById('file-upload').addEventListener('change', (e) => {
 })
 ```
 
-Every time the file input changes I update the `src` of the image tag to the file being submitted.
+Every time the file input changes I update the **src** of the image tag to the file being submitted.
 
 The results ends up like this:
 

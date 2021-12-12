@@ -1,7 +1,7 @@
 ---
-title: Posts - Routing
-date: "2021-12-06"
-description: Setting up routes, authentication middleware and scaffolding the PostController
+title: Post Routing
+date: "2021-12-02 01"
+description: Setting up routes, authentication middleware and scaffolding the PostController.
 ---
 
 ## Routing
@@ -20,7 +20,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth'], fu
 
 The routing is done using the `group` method. 
 
-The prefix is to `'admin'` which prefixes all the nested with **/admin**. 
+The prefix is to `'admin'` which prefixes all the nested resources with **/admin**. 
 
 `'as'` sets the name of the route `'admin.'` this allows me to reference the route when performing redirects and generating URLs to resources i.e.
 
@@ -28,7 +28,7 @@ The prefix is to `'admin'` which prefixes all the nested with **/admin**.
 route('admin.posts')
 ```
 
-Finally, the middleware is set to the auth. This middleware will run on every request that starts with **/admin**. This middleware will ensure the user is logged in before accessing the resource. Otherwise, it will redirect the user to the login page.
+Finally, the middleware is add authentication. This middleware will run on every request that starts with **/admin**. This middleware will ensure the user is logged in before accessing the resource. Otherwise, it will redirect the user to the login page. 
 
 The routes for **posts** can all be done in one line thanks to the `resource` method. This method creates standard URL paths for CRUD operations and maps them to the specified class.
 
@@ -39,19 +39,19 @@ Route::resource('posts', PostController::class);
 The following **posts** resource will be mapped like this:
 
 | Verb        | URI                   | Action      | Route Name           |
-| ----------- | -------------         | ----------- | -------------------- |
-| GET         | /photos               | index       | admin.photos         |
-| GET         | /photos/create        | create      | admin.photos.create  |
-| POST        | /photos               | store       | admin.photos.store   |
-| GET         | /photos/{photo}       | show        | admin.photos.show    |
-| GET         | /photos/{photo}/edit  | edit        | admin.photos.edit    |
-| PUT/PATCH   | /photos/{photo}       | update      | admin.photos.update  |
-| DELETE      | /photos/{photo}       | destroy     | admin.photos.destroy |
+| ----------- | --------------------- | ----------- | -------------------- |
+| GET         | /posts                | index       | admin.posts          |
+| GET         | /posts/create         | create      | admin.posts.create   |
+| POST        | /posts                | store       | admin.posts.store    |
+| GET         | /posts/{post}         | show        | admin.posts.show     |
+| GET         | /posts/{post}/edit    | edit        | admin.posts.edit     |
+| PUT/PATCH   | /posts/{post}         | update      | admin.posts.update   |
+| DELETE      | /posts/{post}         | destroy     | admin.posts.destroy  |
 
 
 ## Scaffolding
 
-Before the aforementioned routes will work we will need to create the `PostController`
+Before the aforementioned routes will work I will need to create the `PostController`
 
 Laravel makes this super fast and simple using the `make:controller` Artisan command:
 
@@ -59,4 +59,7 @@ Laravel makes this super fast and simple using the `make:controller` Artisan com
 php artisan make:controller AdminControllers/PostController --resource
 ```
 
+The way guests and administrators view Posts will be different, so a PostController has been created in the AdminController directory.
+
+This allows for a separation of concerns.
 

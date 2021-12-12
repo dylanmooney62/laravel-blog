@@ -1,14 +1,14 @@
 ---
-title: Posts - Creating a Post
-date: "2021-12-06"
-description: Creating the post form, adding a rich text editor, validation, observers and more
+title: The Post Form
+date: "2021-12-02 02"
+description: Creating the post form, adding a rich text editor, validation, observers and more.
 ---
 
 ## The Data
 
 As of right now, the post structure looks like this:
 
-![Posts table data structure](../../../src/images/tables/posts.png)
+![Posts table data structure](../../src/images/tables/posts.png)
 
 Most of this can be retrieved from basic inputs however there's columns that require additional work.
 
@@ -16,7 +16,7 @@ Most of this can be retrieved from basic inputs however there's columns that req
 
 First of all, when the create route is hit **admin/posts/create** the view containing the post form will be returned. 
 
-The categories have also been queried and return with the view as they will be required to set the `category_id` of the post.
+The categories have also been queried with the view as they will be required to set the `category_id` of the post.
 
 ```php
 // AdminControllers/PostController.php
@@ -34,7 +34,7 @@ class PostController extends Controller
 
 ## The Form
 
-From the form we need to retrieve the following data: **title**, **category**, **body**, **visibility**
+From the form I need to retrieve the following data to create a post: **title**, **category**, **body**, **visibility**
 
 Retrieving the title is straightforward and only requires a text input
 
@@ -59,22 +59,22 @@ visibility is a simple checkbox
 <input type="checkbox" name="visible" class="toggle toggle-primary">
 ```
 
-The body could be retrieved using a textarea but the result would be extremely bland blog posts with no formatting. 
+The body could be retrieved using a textarea but the result would be extremely bland as it only allows text. 
 
-Anyone using a blog platform would expect it to have a rich text editor so that is what we'll have.
+Any blog posting platform worth it's merit would have rich text editor for the formatting of blog content.
 
 
 ### Adding a Rich Text Editor
 
 For the text editor I decided to use Quill.js, this editor is easy to implement and is extremely flexible. 
 
-First add a div to be used as the editor:
+First I add a div to be used as the editor and give the **id** of editor:
 
 ```html
 <div id="editor" class="h-80"></div>
 ```
 
-Then embedded the library and creating the Quill object to initialize the editor at the bottom of the view:
+Then I embed the library and create instantiate the Quill object to initialize the editor:
 
 ```html
 <!-- resources/views/admin/posts/create.blade.php  -->
@@ -96,31 +96,34 @@ Then embedded the library and creating the Quill object to initialize the editor
 
 ### The Result
  
-![New Post form](../../../src/images/ui/new-post.png)
+![New Post form](../../src/images/ui/new-post.png)
 
 ### Does it work? Not quite
 
-In it's current state, the form looks okay but there's one glaring issue when the form is submitted. Let's view the request object to see what's going by dumping a request object.
+In it's current state, the form looks okay but there's one glaring issue when the form is submitted. 
 
-![Dump of request object missing important values](../../../src/images/requests/create-post-missing.png)
 
-As you can see, we expected to receive the following data: **title**, **category**, **body**, **visibility**.
+By using the `ddd($request)` function I can take at the current attributes being sent within the request.
+
+![Dump of request object missing important values](../../src/images/requests/create-post-missing.png)
+
+I expected to receive the **title**, **category**, **body**, **visibility**.
 
 However **body** and **visibility** are missing.
 
-Let's fix this
+Let's fix this.
 
 ### Visibility
 
-The problem with the visibility field is that a comes from a checkbox. The way checkboxes in form submission is they only get sent if the checkbox has been checked.
+The problem with the visibility field is that a comes from a checkbox. The way checkboxes in form submissions work is they only get sent if the checkbox has been checked.
 
-As you can see here, when submitting a post with a checked checkbox we now receive the value: 
+As you can see here, when submitting a post with a checked input I now receive the value: 
 
-![Dump of request object missing important values](../../../src/images/requests/create-post-visible.png)
+![Dump of request object missing important values](../../src/images/requests/create-post-visible.png)
 
-The good news is there's a super simple fix for this
+The good news is there's a super simple fix for this.
 
-Instead of using one checkbox there's a neat little trick that can be done using two inputs.
+Instead of using one checkbox I can add a hidden input and give it the same name as the checkbox.
 
 Giving the input the same name means only one will be submitted to server 
 
@@ -131,25 +134,25 @@ by default this will be the hidden input unless the checkbox is checked
 <input type="checkbox" name="visible" value="1" class="toggle toggle-primary">
 ```
 
-With this in place if the checkbox is checked a 1 will be sent and 0 will be sent if it is unchecked
+With this in place if the checkbox is checked a 1 will be sent otherwise 0 will be sent.
 
 
 ### Body
 
-The problem with body field is the tag used to attach the editor to is a `div` so we can't add a name field to and retrieve the submission that way.
+The problem with body field is the tag used to attach the editor to is a `div` so I can't add a name field to and retrieve the submission that way.
 
 Luckily, Quill.js is aware of this problem a provided an example solution on how to fix this.
 
-First we add hidden input that will be used to submit the editor content
+First I add a hidden input that will contain the editor content to be submitted
 
 ```html
 <input name="body" type="hidden">
 <div id="editor" class="h-80"></div>N
 ```
 
-Next inside the script we create an submit event listener to the form. From this before the form is submit we extract the contents from the editor and pass them into the value of the input.
+Next inside the script I create an on submit event listener to the form. 
 
-Now when we submit the form, the body attribute will sent containing the contents of editor.
+Before the form I set the value of the hidden input to the contents of the editor.
 
 ```js
 const form = document.querySelector('form');
@@ -161,27 +164,34 @@ return true;
 };
 ```
 
+Now when I submit the form, the body attribute will be sent containing the contents of editor.
+
 ### Now it's working!
 
-![Request containing body and visible attributes](../../../src/images/requests/create-post-final.png)
+![Request containing body and visible attributes](../../src/images/requests/create-post-final.png)
 
 
 ### Computed Properties and Finishing Touches
 
 There's still work to be done here. I need values for the slug of the post and the excerpt of the post. Theses values could considered computed properties as they'll be created from different columns
 
-I could have done this in the PostController create method but i'd be duplicating code as I'd to do the exact processing in the update method. This led me look for a solution, something a 'pre save' hook.
+I could have done this in the `PostController` **create** method but i'd be duplicating code as I'd to do the exact same processing in the update method. 
 
-This is where I found Observers, observers all you to listen to events on any modal such as when it is being updated or create and is exactly what i needed
+This led me look for a solution, I was searching for something like a **'pre save'** hook.
 
-I made an observer an attached it to Post model using the command
+This is when I found Observers. Observers allow you to listen to events on a model - Such as it being created or updated.
+
+This is exactly what I needed
+
+I made an Observer for the Post model using the command
 
 ```bash
 php artisan make:observer UserObserver --model=User
 ```
 
-Now I could do some processing to the data before it was saved using the saving method
+Now I could do some processing to the data before it was saved using the **saving method**
 
+This code will run on every save event meaning each time a post is created and updated.
 
 ```php
 class PostObserver
@@ -206,11 +216,9 @@ class PostObserver
 }
 ```
 
-This code will run on every save event meaning each time a post is created and updated the following will take place
-
 I created the slug using the title of post and the slug helper method laravel provides
 
-I also noticed the body request was being submitted in double quotes which would mess up the formatting when displaying the elements so I used the subtr method to remove the the first and last characters which were the quotation marks on both ends. 
+I also noticed the body attribute was being submitted in double quotes which would mess up the formatting when displaying the post so I used the **subtr** method to remove the the first and last characters which were the quotation marks on both ends. 
 
-To create an excerpt I first strip the html tags from body and then retrieve the first 55 characters. I then concatenate "..." to indicate the text has been truncated.
+To create an excerpt I first stripped the html tags from body and then retrieved the first 55 characters. I then concatenated "..." to indicate the text has been truncated.
 

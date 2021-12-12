@@ -3,9 +3,9 @@ module.exports = {
     title: `Laravel`,
     author: {
       name: `Dylan Mooney.`,
-      summary: `\n A blog demonstrating the development of a simple CMS using the PHP frameworks Larvel`,
+      summary: `\n A blog demonstrating the development of a simple CMS using the PHP framework Laravel`,
     },
-    description: `A blog demonstrating the development of a simple CMS using the PHP frameworks Larvel.`,
+    description: `A blog demonstrating the development of a simple CMS using the PHP framework Laravel.`,
   },
   plugins: [
     `gatsby-plugin-image`,
@@ -84,7 +84,7 @@ module.exports = {
             query: `
               {
                 allMarkdownRemark(
-                  sort: { order: DESC, fields: [frontmatter___date] },
+                  sort: { order: ASC, fields: [frontmatter___date] },
                 ) {
                   nodes {
                     excerpt

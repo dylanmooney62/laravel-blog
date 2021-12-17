@@ -4,7 +4,7 @@ date: "2021-12-06"
 description: Deployment to an Apache web server.
 ---
 
-## Configuring apache to server the laravel project
+## Configuring Apache to Server the Laravel Site
 
 I created an apache web-server using a digital ocean droplet running the LAMP stack on Ubuntu 20.04.
 
